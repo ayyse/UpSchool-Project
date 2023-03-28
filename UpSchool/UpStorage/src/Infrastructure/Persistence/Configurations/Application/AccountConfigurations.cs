@@ -28,7 +28,7 @@ namespace Infrastructure.Persistence.Configurations.Application
 
             // Url
             builder.Property(x => x.Url).IsRequired(false);
-            builder.Property(x => x.Url).HasMaxLength(100);
+            builder.Property(x => x.Url).HasMaxLength(1000);
 
             // IsFavourite
             builder.Property(x => x.IsFavourite).IsRequired();
