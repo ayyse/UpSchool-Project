@@ -9,7 +9,7 @@ namespace Application.Common.Interfaces
         DbSet<Country> Countries { get; set; }
         DbSet<City> Cities { get; set; }
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken); // CancellationToken async işlemlerde işlemi durdurmak için kullanılır
         int SaveChanges();
     }
 }
