@@ -10,6 +10,7 @@ namespace Application.Common.Models.Excel
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
 
+
         public City MapToCity()
         {
             return new City()

@@ -7,10 +7,8 @@ namespace Infrastructure.Common.Excel.ExcelMapper
     {
         public ExcelCountryDtoConfiguration()
         {
-
             Map(c => c.Id)
                 .WithColumnIndex(0);
-
 
             Map(c => c.Name)
                 .WithColumnIndex(1);

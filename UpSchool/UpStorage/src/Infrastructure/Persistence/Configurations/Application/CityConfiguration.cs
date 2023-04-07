@@ -53,10 +53,10 @@ namespace Infrastructure.Persistence.Configurations.Application
 
             builder.ToTable("Cities");
 
-            // RelationShips
+            // Relationships
             //builder.HasOne<Country>(x => x.Country)
             //    .WithMany(x => x.Cities)
-            //    .HasForeignKey(x => x.Country);
+            //    .HasForeignKey(x => x.CountryId);
         }
     }
 }

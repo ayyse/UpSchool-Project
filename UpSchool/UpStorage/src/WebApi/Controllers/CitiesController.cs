@@ -1,6 +1,5 @@
 ﻿using Application.Features.Cities.Commands.Add;
 using Application.Features.Cities.Queries.GetAll;
-using Application.Features.Excel.Commands.ReadCities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -13,7 +12,7 @@ namespace WebApi.Controllers
             return Ok(await Mediator.Send(command));
         }
 
-        [HttpPost]
+        [HttpPost("GetAll")]
         public async Task<IActionResult> GetAllAsync(CityGetAllQuery query)
         {
             return Ok(await Mediator.Send(query));
@@ -22,7 +21,7 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
         {
-            return Ok(await Mediator.Send(new CityGetAllQuery(id, null)));
+            return Ok(await Mediator.Send(new CityGetAllQuery(id,null)));
         }
     }
 }

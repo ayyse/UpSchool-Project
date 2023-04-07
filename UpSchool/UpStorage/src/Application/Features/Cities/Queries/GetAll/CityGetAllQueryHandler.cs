@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Cities.Queries.GetAll
 {
-    public class CityGetAllQueryHandler : IRequestHandler<CityGetAllQuery, List<CityGetAllDto>>
+    public class CityGetAllQueryHandler : IRequestHandler<CityGetAllQuery,List<CityGetAllDto>>
     {
         private readonly IApplicationDbContext _applicationDbContext;
         public CityGetAllQueryHandler(IApplicationDbContext applicationDbContext)
@@ -25,24 +25,26 @@ namespace Application.Features.Cities.Queries.GetAll
 
             var cities = await dbQuery.ToListAsync(cancellationToken);
 
-            var cityDtos = MapCityToGetAllDto(cities);
+            var cityDtos = MapCitiesToGetAllDtos(cities);
 
             return cityDtos.ToList();
         }
 
-        private IEnumerable<CityGetAllDto> MapCityToGetAllDto(List<City> cities)
+        private IEnumerable<CityGetAllDto> MapCitiesToGetAllDtos(List<City> cities)
         {
+            List<CityGetAllDto> cityGetAllDtos = new List<CityGetAllDto>();
+
             foreach (var city in cities)
             {
-                yield return new CityGetAllDto() // yield ile eşleme yapma (sadece IEnumerable ile çalışır)
+                yield return new CityGetAllDto()
                 {
                     Id = city.Id,
-                    Name = city.Name,
                     CountryId = city.CountryId,
                     CountryName = city.Country.Name,
+                    Name = city.Name,
                     IsDeleted = city.IsDeleted,
-                    Latitude = city.Latitude,
-                    Longitude = city.Longitude
+                    Longitude = city.Longitude,
+                    Latitude = city.Latitude
                 };
             }
         }

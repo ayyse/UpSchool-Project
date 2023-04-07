@@ -12,6 +12,7 @@ namespace Infrastructure.Persistence.Contexts
         {
 
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // Configurations
@@ -21,6 +22,9 @@ namespace Infrastructure.Persistence.Contexts
             modelBuilder.Ignore<Account>();
             modelBuilder.Ignore<Country>();
             modelBuilder.Ignore<City>();
+            modelBuilder.Ignore<AccountCategory>();
+            modelBuilder.Ignore<Category>();
+            modelBuilder.Ignore<Address>();
 
             base.OnModelCreating(modelBuilder);
         }

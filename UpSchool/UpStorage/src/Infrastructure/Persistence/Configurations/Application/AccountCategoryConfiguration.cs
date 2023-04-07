@@ -12,11 +12,11 @@ namespace Infrastructure.Persistence.Configurations.Application
             builder.HasKey(x => new { x.AccountId, x.CategoryId });
 
             // Relationships
-            builder.HasOne<Account>(x => x.Account) // many to many
+            builder.HasOne<Account>(x => x.Account)
                 .WithMany(x => x.AccountCategories)
                 .HasForeignKey(x => x.AccountId);
 
-            builder.HasOne<Category>(x => x.Category) // many to many
+            builder.HasOne<Category>(x => x.Category)
                 .WithMany(x => x.AccountCategories)
                 .HasForeignKey(x => x.CategoryId);
         }

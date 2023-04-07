@@ -3,7 +3,7 @@ using MediatR;
 
 namespace Application.Features.Cities.Commands.Add
 {
-    public class CityAddCommand : IRequest<Response<int>> // response içinde city id tipini vermemiz gerekiyor
+    public class CityAddCommand : IRequest<Response<int>>
     {
         public string Name { get; set; }
         public int CountryId { get; set; }

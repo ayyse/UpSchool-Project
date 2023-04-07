@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.Configurations.Application
             builder.Property(x => x.Title).HasMaxLength(150);
             builder.HasIndex(x => x.Title);
 
-            //builder.HasIndex(x => new { x.Title, x.UserName });
+            //builder.HasIndex(x => new {x.Title,x.UserName });
 
             // UserName
             builder.Property(x => x.UserName).IsRequired();
@@ -62,7 +62,6 @@ namespace Infrastructure.Persistence.Configurations.Application
             builder.HasIndex(x => x.IsDeleted);
 
             builder.ToTable("Accounts");
-
         }
     }
 }

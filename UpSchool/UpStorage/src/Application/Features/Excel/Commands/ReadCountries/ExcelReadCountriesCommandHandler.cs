@@ -1,15 +1,15 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models.Excel;
+using Application.Features.Excel.Commands.ReadCities;
 using Domain.Common;
 using MediatR;
 
 namespace Application.Features.Excel.Commands.ReadCountries
 {
-    public class ExcelReadCountriesCommandHandler : IRequestHandler<ExcelReadCountriesCommand, Response<int>>
+    public class ExcelReadCountriesCommandHandler : IRequestHandler<ExcelReadCountriesCommand,Response<int>>
     {
         private readonly IExcelService _excelService;
         private readonly IApplicationDbContext _applicationDbContext;
-
         public ExcelReadCountriesCommandHandler(IExcelService excelService, IApplicationDbContext applicationDbContext)
         {
             _excelService = excelService;
@@ -18,7 +18,7 @@ namespace Application.Features.Excel.Commands.ReadCountries
 
         public async Task<Response<int>> Handle(ExcelReadCountriesCommand request, CancellationToken cancellationToken)
         {
-            var countryDtos = _excelService.ReadCountries(new ExcelBase64Dto(file: request.ExcelBase64File));
+            var countryDtos = _excelService.ReadCountries(new ExcelBase64Dto(file:request.ExcelBase64File));
 
             var countries = countryDtos
                 .Select(x => x.MapToCountry())

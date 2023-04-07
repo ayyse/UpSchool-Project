@@ -1,6 +1,4 @@
-﻿using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace Domain.Common
+﻿namespace Domain.Common
 {
     public class Response<T>
     {
@@ -21,6 +19,7 @@ namespace Domain.Common
         public Response(string message, T data)
         {
             Message = message;
+
             Data = data;
         }
 
@@ -32,13 +31,16 @@ namespace Domain.Common
         public Response(string message, T data, List<string> errors)
         {
             Message = message;
+
             Data = data;
+
             Errors = errors;
         }
 
         public Response(string message, List<string> errors)
         {
             Message = message;
+
             Errors = errors;
         }
     }

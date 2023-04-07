@@ -1,6 +1,4 @@
-﻿using Domain.Entities;
-
-namespace Application.Features.Cities.Queries.GetAll
+﻿namespace Application.Features.Cities.Queries.GetAll
 {
     public class CityGetAllDto
     {

@@ -9,6 +9,7 @@ namespace Infrastructure.Services
     {
         public List<ExcelCityDto> ReadCities(ExcelBase64Dto excelDto)
         {
+            // We convert base64string to byte[]
             var fileBytes = Convert.FromBase64String(excelDto.File);
 
             using var stream = new MemoryStream(fileBytes);
@@ -17,6 +18,7 @@ namespace Infrastructure.Services
             importer.Configuration.RegisterClassMap<ExcelCityDtoConfiguration>();
 
             ExcelSheet sheet = importer.ReadSheet();
+
             var cityDtos = sheet.ReadRows<ExcelCityDto>().ToList();
 
             return cityDtos;
@@ -24,6 +26,7 @@ namespace Infrastructure.Services
 
         public List<ExcelCountryDto> ReadCountries(ExcelBase64Dto excelDto)
         {
+            // We convert base64string to byte[]
             var fileBytes = Convert.FromBase64String(excelDto.File);
 
             using var stream = new MemoryStream(fileBytes);

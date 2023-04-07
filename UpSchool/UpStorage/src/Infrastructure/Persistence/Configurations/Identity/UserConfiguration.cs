@@ -1,5 +1,6 @@
-﻿using Domain.Entities;
+using Domain.Entities;
 using Domain.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,7 +22,7 @@ namespace Infrastructure.Persistence.Configurations.Identity
             //Firstname
             builder.Property(user => user.FirstName).IsRequired();
             builder.Property(user => user.FirstName).HasMaxLength(50);
-
+            
             //Lastname
             builder.Property(user => user.LastName).IsRequired();
             builder.Property(user => user.LastName).HasMaxLength(50);
@@ -32,7 +33,7 @@ namespace Infrastructure.Persistence.Configurations.Identity
             // Limit the size of columns to use efficient database types
             builder.Property(u => u.UserName).HasMaxLength(100);
             builder.Property(u => u.NormalizedUserName).HasMaxLength(100);
-
+            
             //Email
             builder.Property(u => u.Email).IsRequired();
             builder.HasIndex(user => user.Email).IsUnique();
@@ -60,20 +61,20 @@ namespace Infrastructure.Persistence.Configurations.Identity
             builder.HasMany<UserRole>().WithOne().HasForeignKey(ur => ur.UserId).IsRequired();
 
             // Each User can have many Addresses
-            //builder.HasMany<Address>().WithOne().HasForeignKey(ut => ut.UserId).IsRequired();
+            //builder.HasMany<Address>().WithOne().HasForeignKey(x => x.UserId).IsRequired();
 
             // CreatedDate
             builder.Property(x => x.CreatedOn).IsRequired();
-
+            
             // CreatedByUserId
             builder.Property(user => user.CreatedByUserId).IsRequired(false);
-
+            
             // ModifiedDate
             builder.Property(user => user.ModifiedOn).IsRequired(false);
-
+            
             // ModifiedByUserId
             builder.Property(user => user.ModifiedByUserId).IsRequired(false);
-
+            
 
             builder.ToTable("Users");
         }

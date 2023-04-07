@@ -10,4 +10,6 @@ namespace Domain.Entities
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
     }
+
+    
 }

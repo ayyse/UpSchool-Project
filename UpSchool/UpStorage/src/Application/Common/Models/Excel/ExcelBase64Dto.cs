@@ -6,7 +6,7 @@
 
         public ExcelBase64Dto()
         {
-
+            
         }
 
         public ExcelBase64Dto(string file)

@@ -36,7 +36,7 @@ namespace Application.Common.Models.Excel
                 SubRegion = this.SubRegion,
                 Latitude = this.Latitude,
                 Longitude = this.Longitude,
-                WikiDataId = this.WikiDataId,
+                WikiDataId = this.WikiDataId
             };
         }
     }
