@@ -1,6 +1,6 @@
 ﻿namespace Domain.Common
 {
-    public abstract class EntityBase<TKey> : IEntityBase<TKey>, ICreatedByEntity, IModifiedByEntity, IDeletedByEntity
+    public abstract class EntityBase<TKey> : IEntityBase<TKey>,ICreatedByEntity,IModifiedByEntity,IDeletedByEntity
     {
         public TKey Id { get; set; }
 

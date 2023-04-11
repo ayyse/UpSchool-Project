@@ -2,7 +2,7 @@
 {
     public static class StringExtensions
     {
-        public static bool IsContainsChar(this string text, int minCount)
+        public static bool IsContainsChar(this string text,int minCount)
         {
           var results= text.Select(x => char.IsLetter(x));
 

@@ -1,8 +1,8 @@
 ﻿using Application.Common.Interfaces;
 using Domain.Entities;
-using Domain.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Domain.Identity;
 
 namespace Infrastructure.Persistence.Contexts
 {
@@ -19,6 +19,7 @@ namespace Infrastructure.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             // Configurations
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
@@ -34,4 +35,5 @@ namespace Infrastructure.Persistence.Contexts
             base.OnModelCreating(modelBuilder);
         }
     }
+
 }

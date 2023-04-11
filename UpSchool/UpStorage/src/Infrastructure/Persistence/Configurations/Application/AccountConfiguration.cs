@@ -62,6 +62,7 @@ namespace Infrastructure.Persistence.Configurations.Application
             builder.HasIndex(x => x.IsDeleted);
 
             builder.ToTable("Accounts");
+
         }
     }
 }

@@ -7,8 +7,10 @@ namespace Infrastructure.Common.Excel.ExcelMapper
     {
         public ExcelCountryDtoConfiguration()
         {
+
             Map(c => c.Id)
                 .WithColumnIndex(0);
+
 
             Map(c => c.Name)
                 .WithColumnIndex(1);
@@ -33,6 +35,7 @@ namespace Infrastructure.Common.Excel.ExcelMapper
                 .WithColumnIndex(6)
                 .WithInvalidFallback(null);
 
+
             Map(c => c.Currency)
                 .WithColumnIndex(7)
                 .WithInvalidFallback(null);
@@ -44,10 +47,10 @@ namespace Infrastructure.Common.Excel.ExcelMapper
             Map(c => c.Region)
                 .WithColumnIndex(9)
                 .WithInvalidFallback(null);
-
             Map(c => c.SubRegion)
                 .WithColumnIndex(10)
                 .WithInvalidFallback(null);
+
 
             Map(c => c.Latitude)
                 .WithColumnIndex(11)
@@ -56,10 +59,11 @@ namespace Infrastructure.Common.Excel.ExcelMapper
             Map(c => c.Longitude)
                 .WithColumnIndex(12)
                 .WithInvalidFallback(null);
-
             Map(c => c.WikiDataId)
                 .WithColumnIndex(13)
                 .WithInvalidFallback(null);
+
         }
+
     }
 }

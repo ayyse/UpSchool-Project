@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations.Identity
 {
-    public class UserClaimConfiguration : IEntityTypeConfiguration<UserClaim>
+    public class UserClaimConfiguration:IEntityTypeConfiguration<UserClaim>
     {
         public void Configure(EntityTypeBuilder<UserClaim> builder)
         {

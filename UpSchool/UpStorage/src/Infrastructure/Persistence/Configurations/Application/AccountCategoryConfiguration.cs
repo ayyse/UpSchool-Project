@@ -4,10 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Infrastructure.Persistence.Configurations.Application
 {
-    public class AccountCategoryConfiguration : IEntityTypeConfiguration<AccountCategory>
+    public class AccountCategoryConfiguration:IEntityTypeConfiguration<AccountCategory>
     {
         public void Configure(EntityTypeBuilder<AccountCategory> builder)
         {
+            
             // ID
             builder.HasKey(x => new { x.AccountId, x.CategoryId });
 

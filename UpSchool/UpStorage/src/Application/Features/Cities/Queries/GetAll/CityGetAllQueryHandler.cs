@@ -5,9 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Cities.Queries.GetAll
 {
-    public class CityGetAllQueryHandler : IRequestHandler<CityGetAllQuery,List<CityGetAllDto>>
+    public class CityGetAllQueryHandler:IRequestHandler<CityGetAllQuery,List<CityGetAllDto>>
     {
         private readonly IApplicationDbContext _applicationDbContext;
+
         public CityGetAllQueryHandler(IApplicationDbContext applicationDbContext)
         {
             _applicationDbContext = applicationDbContext;
@@ -36,6 +37,7 @@ namespace Application.Features.Cities.Queries.GetAll
 
             foreach (var city in cities)
             {
+
                 yield return new CityGetAllDto()
                 {
                     Id = city.Id,

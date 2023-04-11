@@ -6,10 +6,11 @@ using MediatR;
 
 namespace Application.Features.Excel.Commands.ReadCountries
 {
-    public class ExcelReadCountriesCommandHandler : IRequestHandler<ExcelReadCountriesCommand,Response<int>>
+    public class ExcelReadCountriesCommandHandler:IRequestHandler<ExcelReadCountriesCommand,Response<int>>
     {
         private readonly IExcelService _excelService;
         private readonly IApplicationDbContext _applicationDbContext;
+
         public ExcelReadCountriesCommandHandler(IExcelService excelService, IApplicationDbContext applicationDbContext)
         {
             _excelService = excelService;

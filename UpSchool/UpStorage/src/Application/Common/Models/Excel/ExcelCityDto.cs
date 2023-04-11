@@ -22,7 +22,7 @@ namespace Application.Common.Models.Excel
                 Longitude = this.Longitude,
                 CreatedOn = DateTimeOffset.Now,
                 CreatedByUserId = null,
-                IsDeleted = false
+                IsDeleted = false,
             };
         }
     }

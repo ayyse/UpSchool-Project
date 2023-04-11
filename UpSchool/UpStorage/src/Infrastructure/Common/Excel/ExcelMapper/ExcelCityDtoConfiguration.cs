@@ -7,6 +7,7 @@ namespace Infrastructure.Common.Excel.ExcelMapper
     {
         public ExcelCityDtoConfiguration()
         {
+
             Map(c => c.Id)
                 .WithColumnIndex(0);
 
@@ -15,14 +16,13 @@ namespace Infrastructure.Common.Excel.ExcelMapper
 
             Map(c => c.CountryId)
                 .WithColumnIndex(2);
-
             Map(c => c.Latitude)
                 .WithColumnIndex(3)
                 .WithInvalidFallback(null);
-
             Map(c => c.Longitude)
                 .WithColumnIndex(4)
                 .WithInvalidFallback(null);
+
         }
     }
 }

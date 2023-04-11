@@ -2,7 +2,7 @@
 
 namespace Domain.Entities
 {
-    public class Country : EntityBase<int>
+    public class Country:EntityBase<int>
     {
         public string Name { get; set; }
         public string Iso2 { get; set; }

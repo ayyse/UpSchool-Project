@@ -26,6 +26,7 @@ namespace Infrastructure
 
             services.AddIdentity<User, Role>(options =>
                 {
+
                     // User Password Options
                     options.Password.RequireDigit = false;
                     options.Password.RequiredLength = 6;
@@ -42,6 +43,7 @@ namespace Infrastructure
 
             // Scoped Services
             services.AddScoped<IExcelService, ExcelManager>();
+
 
             return services;
         }

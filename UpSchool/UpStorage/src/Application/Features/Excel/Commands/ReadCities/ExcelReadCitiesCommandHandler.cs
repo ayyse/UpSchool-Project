@@ -5,10 +5,11 @@ using MediatR;
 
 namespace Application.Features.Excel.Commands.ReadCities
 {
-    public class ExcelReadCitiesCommandHandler : IRequestHandler<ExcelReadCitiesCommand,Response<int>>
+    public class ExcelReadCitiesCommandHandler:IRequestHandler<ExcelReadCitiesCommand,Response<int>>
     {
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly IExcelService _excelService;
+
         public ExcelReadCitiesCommandHandler(IApplicationDbContext applicationDbContext, IExcelService excelService)
         {
             _applicationDbContext = applicationDbContext;
@@ -35,5 +36,6 @@ namespace Application.Features.Excel.Commands.ReadCities
                 File = command.ExcelBase64File
             };
         }
+
     }
 }

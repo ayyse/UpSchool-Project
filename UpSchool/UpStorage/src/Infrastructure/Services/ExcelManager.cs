@@ -5,7 +5,7 @@ using Infrastructure.Common.Excel.ExcelMapper;
 
 namespace Infrastructure.Services
 {
-    public class ExcelManager : IExcelService
+    public class ExcelManager:IExcelService
     {
         public List<ExcelCityDto> ReadCities(ExcelBase64Dto excelDto)
         {
@@ -20,6 +20,7 @@ namespace Infrastructure.Services
             ExcelSheet sheet = importer.ReadSheet();
 
             var cityDtos = sheet.ReadRows<ExcelCityDto>().ToList();
+
 
             return cityDtos;
         }
@@ -37,6 +38,7 @@ namespace Infrastructure.Services
             ExcelSheet sheet = importer.ReadSheet();
 
             var countryDtos = sheet.ReadRows<ExcelCountryDto>().ToList();
+
 
             return countryDtos;
         }

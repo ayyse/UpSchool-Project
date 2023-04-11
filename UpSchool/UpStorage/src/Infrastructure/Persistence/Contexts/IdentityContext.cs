@@ -1,13 +1,15 @@
-﻿using Domain.Entities;
-using Domain.Identity;
+﻿using Domain.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
+using Domain.Entities;
 
 namespace Infrastructure.Persistence.Contexts
 {
-    public class IdentityContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>
+    public class IdentityContext:IdentityDbContext<User,Role,string,UserClaim,UserRole,UserLogin,RoleClaim,UserToken>
     {
+
+
         public IdentityContext(DbContextOptions<IdentityContext> options) : base(options)
         {
 
