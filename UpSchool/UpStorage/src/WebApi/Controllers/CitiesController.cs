@@ -11,14 +11,12 @@ namespace WebApi.Controllers
       
         public async Task<IActionResult> AddAsync(CityAddCommand command)
         {
-
             return Ok(await Mediator.Send(command));
         }
 
         [HttpPost("GetAll")]
         public async Task<IActionResult> GetAllAsync(CityGetAllQuery query)
         {
-            
             return Ok(await Mediator.Send(query));
         }
 
