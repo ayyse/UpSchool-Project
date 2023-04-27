@@ -45,6 +45,10 @@ namespace Infrastructure
             services.AddScoped<IExcelService, ExcelManager>();
             services.AddScoped<IAuthenticationService, AuthenticationManager>();
 
+            // Singleton Services
+            services.AddSingleton<IJwtService, JwtManager>();
+            services.AddSingleton<ITwoFactorService, TwoFactorManager>();
+
             return services;
         }
     }
