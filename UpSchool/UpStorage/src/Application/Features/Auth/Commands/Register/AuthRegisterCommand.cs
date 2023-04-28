@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using System.Globalization;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Application.Features.Auth.Commands.Register
 {
