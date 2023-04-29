@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Models.Auth;
+using Application.Common.Models.Email;
 using MediatR;
 
 namespace Application.Features.Auth.Commands.Register
@@ -8,10 +9,12 @@ namespace Application.Features.Auth.Commands.Register
     {
         private readonly IAuthenticationService _authenticationService;
         private readonly IJwtService _jwtservice;
-        public AuthRegisterCommandHandler(IAuthenticationService authenticationService, IJwtService jwtservice)
+        private readonly IEmailService _emailService; 
+        public AuthRegisterCommandHandler(IAuthenticationService authenticationService, IJwtService jwtservice, IEmailService emailService)
         {
             _authenticationService = authenticationService;
             _jwtservice = jwtservice;
+            _emailService = emailService;
         }
 
         public async Task<AuthRegisterDto> Handle(AuthRegisterCommand request, CancellationToken cancellationToken)
@@ -20,11 +23,18 @@ namespace Application.Features.Auth.Commands.Register
 
             var userId = await _authenticationService.CreateUserAsync(createUserDto, cancellationToken);
 
-            var emailToken = _authenticationService.GenerateEmailActivationTokenAsync(userId, cancellationToken);
+            var emailToken = await _authenticationService.GenerateEmailActivationTokenAsync(userId, cancellationToken);
 
             var fullName = $"{request.FirstName} {request.LastName}";
 
             var jwtDto = _jwtservice.Generate(userId, request.Email, request.FirstName, request.LastName);
+
+            _emailService.SendEmailConfirmation(new SendEmailConfirmationDto
+            {
+                Email = request.Email,
+                Name = request.FirstName,
+                Token = emailToken
+            });
 
             return new AuthRegisterDto(request.Email, fullName, jwtDto.AccessToken);
         }
