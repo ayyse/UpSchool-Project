@@ -21,7 +21,7 @@ namespace Application.Features.Cities.Commands.Add
             RuleFor(x => x.Name)
                 .MustAsync((command, name, cancellationToken) =>
                 {
-                    return _applicationDbContext.Cities.AllAsync(x => x.Name.ToLower() == name.ToLower(),
+                    return _applicationDbContext.Cities.AllAsync(x => x.Name.ToLower() != name.ToLower(),
                         cancellationToken);
                 });
 

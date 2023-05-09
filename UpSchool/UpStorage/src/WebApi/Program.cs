@@ -1,44 +1,60 @@
 using Application;
+using Application.Common.Interfaces;
 using Domain.Settings;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Globalization;
 using System.Text;
 using WebApi.Filters;
+using WebApi.Services;
 
-var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
 
-builder.Services.AddControllers(opt =>
+try
 {
-    //opt.Filters.Add<ValidationFilter>();
-    opt.Filters.Add<GlobalExceptionFilter>();
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+    builder.Host.UseSerilog();
 
-Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+    // Add services to the container.
 
-builder.Services.Configure<ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(setupAction =>
-{
-    setupAction.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    builder.Services.AddControllers(opt =>
     {
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        Description = $"Input your Bearer token in this format - Bearer token to access this API",
+        //opt.Filters.Add<ValidationFilter>();
+        opt.Filters.Add<GlobalExceptionFilter>();
     });
-    setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
+
+    builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
+    builder.Services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.SuppressModelStateInvalidFilter = true;
+    });
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(setupAction =>
+    {
+        setupAction.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+            Description = $"Input your Bearer token in this format - Bearer token to access this API",
+        });
+        setupAction.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
             new OpenApiSecurityScheme
@@ -51,49 +67,93 @@ builder.Services.AddSwaggerGen(setupAction =>
             }, new List<string>()
         },
     });
-});
-
-// Add services to the container.
-builder.Services.AddApplicationServices();
-builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.WebRootPath);
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(o =>
-    {
-        o.RequireHttpsMetadata = false;
-        o.SaveToken = false;
-        o.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuerSigningKey = true,
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ClockSkew = TimeSpan.Zero,
-            ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
-            ValidAudience = builder.Configuration["JwtSettings:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
-        };
     });
 
-var app = builder.Build();
+    // Add services to the container.
+    builder.Services.AddApplicationServices();
+    builder.Services.AddInfrastructure(builder.Configuration, builder.Environment.WebRootPath);
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+        .AddJwtBearer(o =>
+        {
+            o.RequireHttpsMetadata = false;
+            o.SaveToken = false;
+            o.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero,
+                ValidIssuer = builder.Configuration["JwtSettings:Issuer"],
+                ValidAudience = builder.Configuration["JwtSettings:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JwtSettings:SecretKey"]))
+            };
+        });
+
+    // Localization files path
+    builder.Services.AddLocalization(options =>
+    {
+        options.ResourcesPath = "Resources";
+    });
+
+    builder.Services.Configure<RequestLocalizationOptions>(options =>
+    {
+        var defaultCulture = new CultureInfo("en-GB");
+
+        List<CultureInfo> cultureInfos = new List<CultureInfo> // uygulama içinde desteklenen diller
+        {
+            defaultCulture,
+            new ("tr-TR")
+        };
+
+        options.SupportedCultures = cultureInfos; 
+
+        options.SupportedUICultures = cultureInfos;
+
+        options.DefaultRequestCulture = new RequestCulture(defaultCulture);
+
+        options.ApplyCurrentCultureToResponseHeaders = true;
+    });
+
+    builder.Services.AddSignalR();
+
+    builder.Services.AddScoped<IAccountHubService, AccountHubManager>();
+
+    builder.Services.AddMemoryCache();
+
+    var app = builder.Build();
+
+    // Configure the HTTP request pipeline.
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseStaticFiles();
+
+    // Localization
+    var requestLocalizationOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+    if (requestLocalizationOptions is not null) app.UseRequestLocalization(requestLocalizationOptions.Value);
+
+    app.UseHttpsRedirection();
+
+    app.UseAuthorization();
+
+    app.MapControllers();
+
+    app.Run();
 }
-
-app.UseStaticFiles();
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Application terminated unexpectedly");
+}
+finally
+{
+    Log.CloseAndFlush();
+}
