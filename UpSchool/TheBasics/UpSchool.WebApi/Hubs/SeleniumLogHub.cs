@@ -3,7 +3,8 @@ using UpSchool.Domain.Dtos;
 
 namespace UpSchool.WebApi.Hubs
 {
-    public class SeleniumLogHub : Hub
+    public class SeleniumLogHub : Hub 
+    // içinde client tarafından erişilmesini istediğimiz metotlar olacak
     {
         public async Task SendLogNotificationAsync(SeleniumLogDto log)
         {

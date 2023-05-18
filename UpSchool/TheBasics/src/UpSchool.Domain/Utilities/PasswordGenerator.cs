@@ -14,19 +14,39 @@ namespace UpSchool.Domain.Utilities
         private readonly Random _random;
         private readonly StringBuilder _passwordBuilder;
         private readonly StringBuilder _charSetBuilder;
+        private readonly IIPHelper _ipHelper;
+        private readonly ILocalDB _localDB;
 
-        public PasswordGenerator()
+        public PasswordGenerator(IIPHelper ipHelper, ILocalDB localDB)
         {
             _random = new Random();
 
             _passwordBuilder = new StringBuilder();
 
             _charSetBuilder = new StringBuilder();
+            _ipHelper = ipHelper;
+            _localDB = localDB;
+        }
 
+        public PasswordGenerator()
+        {
+            
         }
 
         public string Generate(GeneratePasswordDto generatePasswordDto)
         {
+            if (string.IsNullOrEmpty(_ipHelper.GetCurrentIPAddress()))
+            {
+                throw new ArgumentNullException("IP Address is not valid.");
+            }
+
+            var ipList = _localDB.IPs;
+
+            if (!ipList.Any())
+            {
+                throw new ArgumentNullException("IP", "There are no IPs in the db to connect.");
+            }
+
             _charSetBuilder.Clear();
             _passwordBuilder.Clear();
 
@@ -41,9 +61,11 @@ namespace UpSchool.Domain.Utilities
             //if (!generatePasswordDto.IncludeNumbers && !generatePasswordDto.IncludeLowercaseCharacters &&
             //!generatePasswordDto.IncludeUppercaseCharacters && !generatePasswordDto.IncludeSpecialCharacters
             //    )
-            if(generatePasswordDto is
-               {IncludeNumbers:false, IncludeLowercaseCharacters:false, 
-                   IncludeUppercaseCharacters:false, IncludeSpecialCharacters:false})
+            if (generatePasswordDto is
+                {
+                    IncludeNumbers: false, IncludeLowercaseCharacters: false,
+                    IncludeUppercaseCharacters: false, IncludeSpecialCharacters: false
+                })
             {
                 return string.Empty;
             }
