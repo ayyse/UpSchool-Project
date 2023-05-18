@@ -30,7 +30,7 @@ namespace UpSchool.Domain.Tests.Utilities
 
         [Fact]
         public void Generate_ShouldReturnPasswordWithGivenLength()
-        {
+        { 
             var ipHelper = A.Fake<IIPHelper>();
 
             A.CallTo(() => ipHelper.GetCurrentIPAddress()).Returns("195.142.70.227");
