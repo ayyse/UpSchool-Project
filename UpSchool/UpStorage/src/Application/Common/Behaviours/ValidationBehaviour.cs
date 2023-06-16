@@ -3,9 +3,10 @@ using MediatR;
 
 namespace Application.Common.Behaviours
 {
-    public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationBehaviour<TRequest,TResponse> : IPipelineBehavior<TRequest,TResponse>
     {
         private readonly IEnumerable<IValidator<TRequest>> _validators;
+
         public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators)
         {
             _validators = validators;
@@ -28,7 +29,9 @@ namespace Application.Common.Behaviours
 
                 if (failures.Any())
                     throw new ValidationException(failures);
+
             }
+
             return await next();
         }
     }

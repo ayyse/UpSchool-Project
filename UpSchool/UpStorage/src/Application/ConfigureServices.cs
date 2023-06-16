@@ -1,8 +1,8 @@
-﻿using Application.Common.Behaviours;
-using FluentValidation;
-using MediatR;
+﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Application.Common.Behaviours;
+using MediatR;
 
 namespace Application
 {
@@ -11,6 +11,7 @@ namespace Application
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
             services.AddMediatR(cfg => {
 
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,8 +1,10 @@
-﻿namespace Application.Common.Models.Errors
+﻿using FluentValidation.Results;
+
+namespace Application.Common.Models.Errors
 {
     public class ApiErrorDto
     {
-        public string Message { get; set; }
+        public string Message { get; set; } // There are one or more errors occurred.
         public List<ErrorDto> Errors { get; set; }
 
         public ApiErrorDto()
@@ -18,7 +20,9 @@
         public ApiErrorDto(string message, List<ErrorDto> errors)
         {
             Message = message;
-            Errors = errors;
+
+            Errors =errors;
         }
+
     }
 }

@@ -19,6 +19,7 @@ namespace Application.Features.Cities.Commands.Add
 
         public async Task<Response<int>> Handle(CityAddCommand request, CancellationToken cancellationToken)
         {
+            
             var city = new City()
             {
                 Name = request.Name,
@@ -34,7 +35,7 @@ namespace Application.Features.Cities.Commands.Add
 
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
-            return new Response<int>(_localizer[CommonLocalizationKeys.City.Added, city.Name], city.Id);
+            return new Response<int>(_localizer[CommonLocalizationKeys.City.Added,city.Name],city.Id);
         }
     }
 }

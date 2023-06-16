@@ -1,10 +1,9 @@
-﻿using Application.Common.Models.Auth;
+using Application.Common.Models.Auth;
 
-namespace Application.Common.Interfaces
+namespace Application.Common.Interfaces;
+
+public interface ITwoFactorService
 {
-    public interface ITwoFactorService
-    {
-        TwoFactorGeneratedDto Generate(string email);
-        bool Validate(string userCode);
-    }
+    TwoFactorGeneratedDto Generate(string email);
+    bool Validate(string userCode);
 }

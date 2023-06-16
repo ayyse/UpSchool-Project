@@ -1,8 +1,7 @@
-﻿namespace Application.Common.Models.Auth
+namespace Application.Common.Models.Auth;
+
+public class TwoFactorGeneratedDto
 {
-    public class TwoFactorGeneratedDto
-    {
-        public byte[] QrCodeImage { get; set; }
-        public string Key { get; set; }
-    }
+    public byte[] QrCodeImage { get; set; }
+    public string Key { get; set; }
 }

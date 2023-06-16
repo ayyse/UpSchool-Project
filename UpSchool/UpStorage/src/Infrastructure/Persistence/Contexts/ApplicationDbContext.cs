@@ -11,6 +11,8 @@ namespace Infrastructure.Persistence.Contexts
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<City> Cities { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<AccountCategory> AccountCategories { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
         {

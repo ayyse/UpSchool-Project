@@ -1,6 +1,7 @@
 ﻿using Application.Common.Interfaces;
 using Application.Common.Localizations;
 using Application.Common.Models.Auth;
+using Application.Features.Auth.Commands.Login;
 using Domain.Identity;
 using FluentValidation;
 using FluentValidation.Results;
@@ -10,17 +11,15 @@ using Microsoft.Extensions.Localization;
 
 namespace Infrastructure.Services
 {
-    public class AuthenticationManager : IAuthenticationService
+    public class AuthenticationManager:IAuthenticationService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtService _jwtService;
         private readonly IStringLocalizer<CommonLocalizations> _localizer;
-        public AuthenticationManager(
-            UserManager<User> userManager, 
-            SignInManager<User> signInManager, 
-            IJwtService jwtService, 
-            IStringLocalizer<CommonLocalizations> localizer)
+
+
+        public AuthenticationManager(UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IStringLocalizer<CommonLocalizations> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -43,18 +42,20 @@ namespace Infrastructure.Services
             }
 
             return user.Id;
+
         }
 
         public async Task<string> GenerateEmailActivationTokenAsync(string userId, CancellationToken cancellationToken)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+           var user = await _userManager.FindByIdAsync(userId);
 
-            return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+           return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
         }
 
         public Task<bool> CheckIfUserExists(string email, CancellationToken cancellationToken)
         {
-            return _userManager.Users.AnyAsync(x => x.Email == email, cancellationToken);
+            return _userManager.Users.AnyAsync(x => x.Email == email,cancellationToken);
         }
 
         public async Task<JwtDto> LoginAsync(AuthLoginRequest authLoginRequest, CancellationToken cancellationToken)
@@ -73,7 +74,7 @@ namespace Infrastructure.Services
 
         private List<ValidationFailure> CreateValidationFailure => new List<ValidationFailure>()
         {
-            new ValidationFailure("Email & Password", _localizer[CommonLocalizationKeys.Auth.EmailOrPasswordIsInCorrect]);
+            new ValidationFailure("Email & Password",_localizer[CommonLocalizationKeys.Auth.EmailOrPasswordIsInCorrect])
         };
     }
 }

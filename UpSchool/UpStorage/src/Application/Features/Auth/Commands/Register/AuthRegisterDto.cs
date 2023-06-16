@@ -9,7 +9,7 @@
         public AuthRegisterDto(string email, string fullName, string activationToken)
         {
             Email = email;
-            FullName = fullName;
+            FullName =fullName;
             ActivationToken = activationToken;
         }
     }

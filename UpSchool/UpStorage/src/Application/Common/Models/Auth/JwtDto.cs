@@ -8,6 +8,7 @@
         public JwtDto(string accessToken, DateTime expiryDate)
         {
             AccessToken = accessToken;
+
             ExpiryDate = expiryDate;
         }
     }

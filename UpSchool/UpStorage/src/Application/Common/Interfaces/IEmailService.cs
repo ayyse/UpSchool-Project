@@ -1,9 +1,8 @@
-﻿using Application.Common.Models.Email;
+using Application.Common.Models.Email;
 
-namespace Application.Common.Interfaces
+namespace Application.Common.Interfaces;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        void SendEmailConfirmation(SendEmailConfirmationDto sendEmailConfirmationDto);
-    }
+    void SendEmailConfirmation(SendEmailConfirmationDto sendEmailConfirmationDto);
 }

@@ -1,17 +1,18 @@
-﻿using Application.Common.Interfaces;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Application.Common.Interfaces;
 using Application.Common.Models.Auth;
 using Domain.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace Infrastructure.Services
 {
-    public class JwtManager : IJwtService
+    public class JwtManager:IJwtService
     {
         private readonly JwtSettings _jwtSettings;
+
         public JwtManager(IOptions<JwtSettings> jwtSettingsOption)
         {
             _jwtSettings = jwtSettingsOption.Value;
@@ -19,35 +20,37 @@ namespace Infrastructure.Services
 
         public JwtDto Generate(string userId, string email, string firstName, string lastName, List<string>? roles = null)
         {
-            // claim = payload kısmındaki propertylere verilen isim
             var claims = new List<Claim>()
             {
                 new Claim("uid", userId),
-                new Claim(JwtRegisteredClaimNames.Email, email),
-                new Claim(JwtRegisteredClaimNames.Sub, userId),
-                new Claim(JwtRegisteredClaimNames.GivenName, firstName),
-                new Claim(JwtRegisteredClaimNames.FamilyName, lastName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Email,email),
+                new Claim(JwtRegisteredClaimNames.Sub,userId),
+                new Claim(JwtRegisteredClaimNames.GivenName,firstName),
+                new Claim(JwtRegisteredClaimNames.FamilyName,lastName),
+                new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString()),
             };
 
-            // stringi byte arraye çevirmek için Encoding.UTF8 kullanılabilir
-            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey)); 
-            
-            var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256);
+            var symmetricKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+
+            // Neslihan bizleri uyardı arkadaşlar. Lütfen bu konuyu öğrendikten sonra geriye dönüp buradaki algoritmamızı AES ile güncelleyelim.
+            // <3 Teşekkürler Neslihan.
+
+            var signingCredentials = new SigningCredentials(symmetricKey, SecurityAlgorithms.HmacSha256Signature);
 
             var expiry = DateTime.Now.AddMinutes(_jwtSettings.ExpiryInMinutes);
 
-            var jwtSecurtiyToken = new JwtSecurityToken(
+            var jwtSecurityToken = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
-                claims: claims,
                 expires: expiry,
+                claims: claims,
                 signingCredentials: signingCredentials
-                );
+            );
 
-            var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurtiyToken);
 
-            return new JwtDto(accessToken, expiry);
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+
+            return new JwtDto(accessToken,expiry);
         }
     }
 }

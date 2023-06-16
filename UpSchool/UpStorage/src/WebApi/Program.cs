@@ -1,19 +1,18 @@
+using System.Globalization;
 using Application;
+using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using Application.Common.Interfaces;
 using Domain.Settings;
-using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using System.Globalization;
-using System.Text;
 using WebApi.Filters;
+using Microsoft.Extensions.Options;
+using Serilog;
 using WebApi.Services;
-
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -25,6 +24,10 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog();
+
+    builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+    builder.Services.AddScoped<ICurrentUserService, CurrentUserManager>();
 
     // Add services to the container.
 
@@ -95,7 +98,7 @@ try
             };
         });
 
-    // Localization files path
+    // Localization Files' Path
     builder.Services.AddLocalization(options =>
     {
         options.ResourcesPath = "Resources";
@@ -105,13 +108,13 @@ try
     {
         var defaultCulture = new CultureInfo("en-GB");
 
-        List<CultureInfo> cultureInfos = new List<CultureInfo> // uygulama içinde desteklenen diller
-        {
-            defaultCulture,
-            new ("tr-TR")
-        };
+        List<CultureInfo> cultureInfos = new List<CultureInfo>()
+    {
+        defaultCulture, // en-GB
+        new ("tr-TR")
+    };
 
-        options.SupportedCultures = cultureInfos; 
+        options.SupportedCultures = cultureInfos;
 
         options.SupportedUICultures = cultureInfos;
 
@@ -125,6 +128,16 @@ try
     builder.Services.AddScoped<IAccountHubService, AccountHubManager>();
 
     builder.Services.AddMemoryCache();
+
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowAll",
+            builder => builder
+                .AllowAnyMethod()
+                .AllowCredentials()
+                .SetIsOriginAllowed((host) => true)
+                .AllowAnyHeader());
+    });
 
     var app = builder.Build();
 
@@ -143,11 +156,16 @@ try
 
     app.UseHttpsRedirection();
 
+    app.UseCors("AllowAll");
+
+    app.UseAuthentication();
+
     app.UseAuthorization();
 
     app.MapControllers();
 
     app.Run();
+
 }
 catch (Exception ex)
 {

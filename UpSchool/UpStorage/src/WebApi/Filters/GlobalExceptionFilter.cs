@@ -1,12 +1,20 @@
-﻿using Application.Common.Models.Errors;
+﻿using System.Text.Json;
+using Application.Common.Models.Errors;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace WebApi.Filters
 {
-    public class GlobalExceptionFilter : IAsyncExceptionFilter
+    public class GlobalExceptionFilter:IAsyncExceptionFilter
     {
+        private readonly ILogger<GlobalExceptionFilter> _logger;
+
+        public GlobalExceptionFilter(ILogger<GlobalExceptionFilter> logger)
+        {
+            _logger = logger;
+        }
+
         public Task OnExceptionAsync(ExceptionContext context)
         {
             ApiErrorDto apiErrorDto = new ApiErrorDto();
@@ -21,24 +29,36 @@ namespace WebApi.Filters
                         .Select(x => x.PropertyName)
                         .Distinct();
 
+                    // ["email","userName","password"]
+
                     foreach (var propertyName in propertyNames)
                     {
                         var propertyFailures = validationException.Errors
-                            .Where(x => x.PropertyName == propertyName)
+                            .Where(e => e.PropertyName == propertyName)
                             .Select(x => x.ErrorMessage)
                             .ToList();
 
-                        apiErrorDto.Errors.Add(new ErrorDto(propertyName, propertyFailures));
+                        // Password is required,
+                        // Password must have at least 5 characters
+                        // Password must have at least 1 special character.
+
+                        apiErrorDto.Errors.Add(new ErrorDto(propertyName,propertyFailures));
                     }
 
-                    apiErrorDto.Message = "One or more validation errors were occured.";
-                    context.Result = new  BadRequestObjectResult(apiErrorDto);
+                    apiErrorDto.Message = "One or more validation errors were occurred.";
 
+                    context.Result = new BadRequestObjectResult(apiErrorDto);
                     break;
+
+                
 
                 default:
 
-                    apiErrorDto.Message = "An unexpected error was occured.";
+                    _logger.LogError(context.Exception,context.Exception.Message);
+
+                    // _mailService.SendErrorMail();
+
+                    apiErrorDto.Message = "An unexpected error was occurred.";
 
                     context.Result = new ObjectResult(apiErrorDto)
                     {
@@ -55,6 +75,7 @@ namespace WebApi.Filters
             //var apiErrorDtoJson = JsonSerializer.Serialize(apiErrorDto);
 
             //await context.HttpContext.Response.WriteAsync(apiErrorDtoJson);
+
         }
     }
 }

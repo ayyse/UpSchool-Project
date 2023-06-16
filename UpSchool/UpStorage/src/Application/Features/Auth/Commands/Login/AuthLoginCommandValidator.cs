@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Application.Features.Auth.Commands.Login
 {
-    public class AuthLoginCommandValidator : AbstractValidator<AuthLoginCommand>
+    public class AuthLoginCommandValidator:AbstractValidator<AuthLoginCommand>
     {
         private readonly IAuthenticationService _authenticationService;
         public AuthLoginCommandValidator(IAuthenticationService authenticationService)
@@ -18,7 +18,7 @@ namespace Application.Features.Auth.Commands.Login
                 .NotEmpty()
                 .WithMessage("Your email or password is incorrect.");
 
-            RuleFor(x => x.Email)
+            RuleFor(x=>x.Email)
                 .MustAsync(CheckIfUserExists)
                 .WithMessage("Your email or password is incorrect.");
         }

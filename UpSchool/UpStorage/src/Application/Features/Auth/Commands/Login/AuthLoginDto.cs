@@ -8,6 +8,7 @@
         public AuthLoginDto(string accessToken, DateTime expires)
         {
             AccessToken = accessToken;
+
             Expires = expires;
         }
     }
